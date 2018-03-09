@@ -25,6 +25,7 @@ func run() {
 
 	board := pong.NewBoard()
 	player := pong.NewPlayer(board)
+	ball := pong.NewBall(board)
 
 	for !win.Closed() {
 		win.Clear(colornames.Whitesmoke)
@@ -33,10 +34,13 @@ func run() {
 
 		board.Draw(imd)
 		player.Draw(imd)
-
-		player.HandleWindowEvents(win)
+		ball.Draw(imd)
 
 		imd.Draw(win)
+
+		player.HandleWindowEvents(win)
+		ball.Move()
+
 		win.Update()
 		imd.Clear()
 	}
