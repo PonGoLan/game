@@ -23,16 +23,20 @@ func run() {
 
 	imd := imdraw.New(nil)
 
-	player := pong.NewPlayer()
 	board := pong.NewBoard()
+	player := pong.NewPlayer(board)
 
 	for !win.Closed() {
+		win.Clear(colornames.Whitesmoke)
+
 		board.Draw(imd)
 		player.Draw(imd)
 
+		player.HandleWindowEvents(win)
+
 		imd.Draw(win)
 		win.Update()
-		imd.Reset()
+		imd.Clear()
 	}
 }
 
