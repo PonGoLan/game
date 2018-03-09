@@ -22,7 +22,7 @@ func (p *Player) Draw(imd *imdraw.IMDraw) {
 
 	imd.Push(pixel.V(float64(p.X)*scale, float64(p.Y+p.Size)*scale))
 
-	imd.Line(5)
+	imd.Line(1 * scale)
 }
 
 func NewPlayer(b *Board) *Player {
