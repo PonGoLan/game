@@ -29,6 +29,8 @@ func run() {
 	for !win.Closed() {
 		win.Clear(colornames.Whitesmoke)
 
+		pong.ApplyMatrixToWindow(win)
+
 		board.Draw(imd)
 		player.Draw(imd)
 
