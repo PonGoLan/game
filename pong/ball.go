@@ -27,11 +27,11 @@ func (b *Ball) Draw(imd *imdraw.IMDraw) {
 
 	imd.Circle(1*scale, 0)
 
-	imd.Color = colornames.Red
-	imd.Push(pixel.V(float64(b.PredictedX)*scale, float64(b.PredictedY)*scale))
-	imd.Push(pixel.V(float64(b.PredictedX+5*b.VectorX)*scale, float64(b.PredictedY+5*b.VectorY)*scale))
+	// imd.Color = colornames.Red
+	// imd.Push(pixel.V(float64(b.PredictedX)*scale, float64(b.PredictedY)*scale))
+	// imd.Push(pixel.V(float64(b.PredictedX+5*b.VectorX)*scale, float64(b.PredictedY+5*b.VectorY)*scale))
 
-	imd.Line(2)
+	// imd.Line(2)
 }
 
 func NewBall(b *Board) *Ball {
