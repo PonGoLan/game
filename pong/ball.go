@@ -13,8 +13,6 @@ type Ball struct {
 	PredictedX int
 	PredictedY int
 
-	Speed int
-
 	VectorX int
 	VectorY int
 
@@ -54,14 +52,16 @@ func NewBall(b *Board) *Ball {
 }
 
 func (b *Ball) Move() {
-	newX := b.X + 1*b.VectorX
-	newY := b.Y + 1*b.VectorY
+	newX := b.X + b.VectorX
+	newY := b.Y + b.VectorY
 
 	if newX == 0 || newX == b.Board.SizeX {
 		b.VectorX *= -1
+		return
 	}
 	if newY == 0 || newY == b.Board.SizeY {
 		b.VectorY *= -1
+		return
 	}
 
 	b.X = newX
