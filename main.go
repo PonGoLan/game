@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/PonGoLan/pong-go-lan/pong"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/imdraw"
@@ -27,22 +29,27 @@ func run() {
 	player := pong.NewPlayer(board)
 	ball := pong.NewBall(board)
 
-	for !win.Closed() {
-		win.Clear(colornames.Whitesmoke)
+	aTick := time.Tick(time.Second / 128)
 
+	for !win.Closed() {
 		pong.ApplyMatrixToWindow(win)
 
 		board.Draw(imd)
 		player.Draw(imd)
 		ball.Draw(imd)
 
+		win.Clear(colornames.Whitesmoke)
 		imd.Draw(win)
-
-		player.HandleWindowEvents(win)
-		ball.Move()
-
 		win.Update()
 		imd.Clear()
+
+		select {
+		case <-aTick:
+			pong.BallPlayerCollision(ball, player)
+			ball.Move()
+			player.HandleWindowEvents(win)
+		default:
+		}
 	}
 }
 
