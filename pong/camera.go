@@ -17,9 +17,9 @@ var instance *camera
 func init() {
 	instance = new(camera)
 
-	instance.Pos = pixel.V(250, 250)
+	instance.Pos = pixel.V(750, 500)
 	instance.Speed = 500.0
-	instance.Zoom = 1.0
+	instance.Zoom = 0.60
 	instance.ZoomSpeed = 1.2
 }
 

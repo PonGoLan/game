@@ -38,7 +38,7 @@ func run() {
 		player.Draw(imd)
 		ball.Draw(imd)
 
-		win.Clear(colornames.Whitesmoke)
+		win.Clear(colornames.Black)
 		imd.Draw(win)
 		win.Update()
 		imd.Clear()
