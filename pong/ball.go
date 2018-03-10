@@ -7,8 +7,12 @@ import (
 )
 
 type Ball struct {
-	X     int
-	Y     int
+	X int
+	Y int
+
+	PredictedX int
+	PredictedY int
+
 	Speed int
 
 	VectorX int
@@ -24,6 +28,12 @@ func (b *Ball) Draw(imd *imdraw.IMDraw) {
 	imd.Push(pixel.V(float64(b.X)*scale, float64(b.Y)*scale))
 
 	imd.Circle(1*scale, 0)
+
+	imd.Color = colornames.Red
+	imd.Push(pixel.V(float64(b.PredictedX)*scale, float64(b.PredictedY)*scale))
+	imd.Push(pixel.V(float64(b.PredictedX+5*b.VectorX)*scale, float64(b.PredictedY+5*b.VectorY)*scale))
+
+	imd.Line(2)
 }
 
 func NewBall(b *Board) *Ball {
@@ -34,6 +44,9 @@ func NewBall(b *Board) *Ball {
 
 	ball.VectorX = 1
 	ball.VectorY = 1
+
+	ball.PredictedX = ball.X + 1*ball.VectorX
+	ball.PredictedY = ball.Y + 1*ball.VectorY
 
 	ball.Board = b
 
@@ -53,4 +66,7 @@ func (b *Ball) Move() {
 
 	b.X = newX
 	b.Y = newY
+
+	b.PredictedX = b.X + 1*b.VectorX
+	b.PredictedY = b.Y + 1*b.VectorY
 }
