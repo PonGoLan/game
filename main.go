@@ -26,7 +26,10 @@ func run() {
 	imd := imdraw.New(nil)
 
 	board := pong.NewBoard()
-	player := pong.NewPlayer(board)
+
+	player1 := pong.NewPlayer(1, board)
+	player2 := pong.NewPlayer(2, board)
+
 	ball := pong.NewBall(board)
 
 	aTick := time.Tick(time.Second / 128)
@@ -35,7 +38,8 @@ func run() {
 		pong.ApplyMatrixToWindow(win)
 
 		board.Draw(imd)
-		player.Draw(imd)
+		player1.Draw(imd)
+		player2.Draw(imd)
 		ball.Draw(imd)
 
 		win.Clear(colornames.Black)
@@ -45,9 +49,11 @@ func run() {
 
 		select {
 		case <-aTick:
-			pong.BallPlayerCollision(ball, player)
+			pong.BallPlayerCollision(ball, player1)
+			pong.BallPlayerCollision(ball, player2)
 			ball.Move()
-			player.HandleWindowEvents(win)
+			player1.HandleWindowEvents(win)
+			player2.HandleWindowEvents(win)
 		default:
 		}
 	}
