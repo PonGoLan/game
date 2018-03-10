@@ -31,7 +31,7 @@ func NewPlayer(b *Board) *Player {
 	player.X = 0
 	player.Y = 0
 
-	player.Size = 10
+	player.Size = 20
 
 	player.Board = b
 
