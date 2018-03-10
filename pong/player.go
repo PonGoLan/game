@@ -28,8 +28,8 @@ func (p *Player) Draw(imd *imdraw.IMDraw) {
 func NewPlayer(b *Board) *Player {
 	player := new(Player)
 
-	player.X = 0
-	player.Y = 0
+	player.X = 1
+	player.Y = 1
 
 	player.Size = 20
 
@@ -41,7 +41,7 @@ func NewPlayer(b *Board) *Player {
 func (p *Player) Move(offsetX, offsetY int) {
 	newX := p.X + offsetX
 	newY := p.Y + offsetY
-	if newX <= p.Board.SizeX && newX >= 0 {
+	if newX < p.Board.SizeX && newX > 0 {
 		p.X = newX
 	}
 	if newY+p.Size <= p.Board.SizeY && newY >= 0 {
