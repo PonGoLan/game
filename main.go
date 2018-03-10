@@ -25,8 +25,9 @@ func run() {
 
 	imd := imdraw.New(nil)
 
-	board := pong.NewBoard()
+	game := pong.NewGame()
 
+	board := pong.NewBoard()
 	player1 := pong.NewPlayer(1, board)
 	player2 := pong.NewPlayer(2, board)
 
@@ -44,6 +45,9 @@ func run() {
 
 		win.Clear(colornames.Black)
 		imd.Draw(win)
+
+		game.DrawScore(win)
+
 		win.Update()
 		imd.Clear()
 
@@ -51,7 +55,7 @@ func run() {
 		case <-aTick:
 			pong.BallPlayerCollision(ball, player1)
 			pong.BallPlayerCollision(ball, player2)
-			ball.Move()
+			ball.Move(game)
 			player1.HandleWindowEvents(win)
 			player2.HandleWindowEvents(win)
 		default:

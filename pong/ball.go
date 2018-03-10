@@ -51,10 +51,16 @@ func NewBall(b *Board) *Ball {
 	return ball
 }
 
-func (b *Ball) Move() {
+func (b *Ball) Move(game *Game) {
 	newX := b.X + b.VectorX
 	newY := b.Y + b.VectorY
 
+	if newX == 0 {
+		game.AddPoint(1)
+	}
+	if newX == b.Board.SizeX {
+		game.AddPoint(2)
+	}
 	if newX == 0 || newX == b.Board.SizeX {
 		b.VectorX *= -1
 		return
