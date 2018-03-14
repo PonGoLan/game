@@ -10,23 +10,35 @@ package pong;
 service Ponger {
   // Sends a player position
   rpc SetPlayerPosition (SetPlayerPositionRequest) returns (SetPlayerPositionReply) {}
+  // Gets the ball position
   rpc GetBallPosition (GetBallPositionRequest) returns (GetBallPositionReply) {}
+
+  // Get Player number and the handshake which will be required in the other calls
+  rpc IdentifyPlayer (IdentifyPlayerRequest) returns (IdentifyPlayerReply) {}
 }
 
 message SetPlayerPositionRequest {
-  int32 Id = 1;
-  int32 X = 2;
-  int32 Y = 3;
+  string Handshake = 1;
+  int32 PlayerNumber = 2;
+  int32 X = 3;
+  int32 Y = 4;
 }
 message SetPlayerPositionReply {
-  int32 Id = 1;
+  int32 PlayerNumber = 1;
   int32 X = 2;
   int32 Y = 3;
 }
 
-
-message GetBallPositionRequest {}
+message GetBallPositionRequest {
+  string Handshake = 1;
+}
 message GetBallPositionReply {
-  int32 X = 2;
-  int32 Y = 3;
+  int32 X = 1;
+  int32 Y = 2;
+}
+
+message IdentifyPlayerRequest {}
+message IdentifyPlayerReply {
+  int32 PlayerNumber = 1;
+  string Handshake = 2;
 }
