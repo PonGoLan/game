@@ -12,6 +12,8 @@ service Ponger {
   rpc SetPlayerPosition (SetPlayerPositionRequest) returns (SetPlayerPositionReply) {}
   // Gets the ball position
   rpc GetBallPosition (GetBallPositionRequest) returns (GetBallPositionReply) {}
+  // Get opponent position
+  rpc GetOpponent (GetOpponentRequest) returns (GetOpponentReply){}
 
   // Get Player number and the handshake which will be required in the other calls
   rpc IdentifyPlayer (IdentifyPlayerRequest) returns (IdentifyPlayerReply) {}
@@ -41,4 +43,14 @@ message IdentifyPlayerRequest {}
 message IdentifyPlayerReply {
   int32 PlayerNumber = 1;
   string Handshake = 2;
+}
+
+message GetOpponentRequest {
+  int32 PlayerNumber = 1;
+  string Handshake = 2;
+}
+message GetOpponentReply {
+  int32 PlayerNumber = 1;
+  int32 X = 2;
+  int32 Y = 3;
 }
