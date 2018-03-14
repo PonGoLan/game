@@ -43,10 +43,10 @@ func NewPlayer(playerNumber int, b *Board) *Player {
 	player.ButtonDown = pixelgl.KeyS
 	player.ButtonLeft = pixelgl.KeyA
 	player.ButtonRight = pixelgl.KeyD
-	if playerNumber == 1 {
+	if playerNumber == 0 {
 		player.X = 1
 		player.Y = 1
-	} else if playerNumber == 2 {
+	} else if playerNumber == 1 {
 		//player.ButtonUp = pixelgl.KeyUp
 		//player.ButtonDown = pixelgl.KeyDown
 		//player.ButtonLeft = pixelgl.KeyLeft
@@ -72,12 +72,12 @@ func (p *Player) GetPosition() (int, int) {
 func (p *Player) Move(offsetX, offsetY int) {
 	newX := p.X + offsetX
 	newY := p.Y + offsetY
-	if p.Number == 1 {
+	if p.Number == 0 {
 		if newX < p.Board.SizeX/2 && newX > 0 {
 			p.X = newX
 		}
 	}
-	if p.Number == 2 {
+	if p.Number == 1 {
 		if newX > p.Board.SizeX/2 && newX < p.Board.SizeX {
 			p.X = newX
 		}

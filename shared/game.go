@@ -3,6 +3,8 @@ package pong
 import (
 	"fmt"
 
+	"github.com/faiface/pixel/imdraw"
+
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel/text"
@@ -26,6 +28,12 @@ func NewGame() *Game {
 
 func (g *Game) AddPoint(playerId int) {
 	g.Score[playerId]++
+}
+
+func (g *Game) DrawPlayers(imd *imdraw.IMDraw) {
+	for _, p := range g.Players {
+		p.Draw(imd)
+	}
 }
 
 func (g *Game) DrawScore(win *pixelgl.Window) {
