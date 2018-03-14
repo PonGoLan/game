@@ -23,17 +23,24 @@ const (
 
 var (
 	game *pong.Game
+
+	playerHashcodes map[int]string
 )
 
 type server struct{}
 
 func (s *server) SetPlayerPosition(ctx context.Context, in *pb.SetPlayerPositionRequest) (*pb.SetPlayerPositionReply, error) {
-	game.Players[0].SetPosition(int(in.X), int(in.Y))
+	oldX, oldY := game.Players[in.PlayerNumber].GetPosition()
+
+	if oldX != int(in.X) || oldY != int(in.Y) {
+		log.Printf("MOVE [%d] to (%d, %d)\n", in.PlayerNumber, in.X, in.Y)
+	}
+	game.Players[in.PlayerNumber].SetPosition(int(in.X), int(in.Y))
 
 	return &pb.SetPlayerPositionReply{
-		Id: 1,
-		X:  in.X,
-		Y:  in.Y,
+		PlayerNumber: in.PlayerNumber,
+		X:            in.X,
+		Y:            in.Y,
 	}, nil
 }
 func (s *server) GetBallPosition(ctx context.Context, in *pb.GetBallPositionRequest) (*pb.GetBallPositionReply, error) {
@@ -45,8 +52,18 @@ func (s *server) GetBallPosition(ctx context.Context, in *pb.GetBallPositionRequ
 	}, nil
 }
 
+func (s *server) IdentifyPlayer(ctx context.Context, in *pb.IdentifyPlayerRequest) (*pb.IdentifyPlayerReply, error) {
+	playerHashcodes[1] = "lol"
+
+	return &pb.IdentifyPlayerReply{
+		PlayerNumber: 1,
+		Handshake:    "lol",
+	}, nil
+}
+
 func init() {
 	game = pong.NewGame()
+	playerHashcodes = make(map[int]string)
 }
 
 func run() {
