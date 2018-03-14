@@ -1,1 +1,1 @@
-protoc -I pong/ pong/pong.proto --go_out=plugins=grpc:pong
+protoc -I ./ pong.proto --go_out=plugins=grpc:./

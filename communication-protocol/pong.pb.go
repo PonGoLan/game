@@ -10,6 +10,8 @@ It is generated from these files:
 It has these top-level messages:
 	SetPlayerPositionRequest
 	SetPlayerPositionReply
+	GetBallPositionRequest
+	GetBallPositionReply
 */
 package pong
 
@@ -65,7 +67,6 @@ func (m *SetPlayerPositionRequest) GetY() int32 {
 	return 0
 }
 
-// The response message containing the greetings
 type SetPlayerPositionReply struct {
 	Id int32 `protobuf:"varint,1,opt,name=Id" json:"Id,omitempty"`
 	X  int32 `protobuf:"varint,2,opt,name=X" json:"X,omitempty"`
@@ -98,9 +99,43 @@ func (m *SetPlayerPositionReply) GetY() int32 {
 	return 0
 }
 
+type GetBallPositionRequest struct {
+}
+
+func (m *GetBallPositionRequest) Reset()                    { *m = GetBallPositionRequest{} }
+func (m *GetBallPositionRequest) String() string            { return proto.CompactTextString(m) }
+func (*GetBallPositionRequest) ProtoMessage()               {}
+func (*GetBallPositionRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+
+type GetBallPositionReply struct {
+	X int32 `protobuf:"varint,2,opt,name=X" json:"X,omitempty"`
+	Y int32 `protobuf:"varint,3,opt,name=Y" json:"Y,omitempty"`
+}
+
+func (m *GetBallPositionReply) Reset()                    { *m = GetBallPositionReply{} }
+func (m *GetBallPositionReply) String() string            { return proto.CompactTextString(m) }
+func (*GetBallPositionReply) ProtoMessage()               {}
+func (*GetBallPositionReply) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+
+func (m *GetBallPositionReply) GetX() int32 {
+	if m != nil {
+		return m.X
+	}
+	return 0
+}
+
+func (m *GetBallPositionReply) GetY() int32 {
+	if m != nil {
+		return m.Y
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*SetPlayerPositionRequest)(nil), "pong.SetPlayerPositionRequest")
 	proto.RegisterType((*SetPlayerPositionReply)(nil), "pong.SetPlayerPositionReply")
+	proto.RegisterType((*GetBallPositionRequest)(nil), "pong.GetBallPositionRequest")
+	proto.RegisterType((*GetBallPositionReply)(nil), "pong.GetBallPositionReply")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -114,8 +149,9 @@ const _ = grpc.SupportPackageIsVersion4
 // Client API for Ponger service
 
 type PongerClient interface {
-	// Sends a greeting
+	// Sends a player position
 	SetPlayerPosition(ctx context.Context, in *SetPlayerPositionRequest, opts ...grpc.CallOption) (*SetPlayerPositionReply, error)
+	GetBallPosition(ctx context.Context, in *GetBallPositionRequest, opts ...grpc.CallOption) (*GetBallPositionReply, error)
 }
 
 type pongerClient struct {
@@ -135,11 +171,21 @@ func (c *pongerClient) SetPlayerPosition(ctx context.Context, in *SetPlayerPosit
 	return out, nil
 }
 
+func (c *pongerClient) GetBallPosition(ctx context.Context, in *GetBallPositionRequest, opts ...grpc.CallOption) (*GetBallPositionReply, error) {
+	out := new(GetBallPositionReply)
+	err := grpc.Invoke(ctx, "/pong.Ponger/GetBallPosition", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Ponger service
 
 type PongerServer interface {
-	// Sends a greeting
+	// Sends a player position
 	SetPlayerPosition(context.Context, *SetPlayerPositionRequest) (*SetPlayerPositionReply, error)
+	GetBallPosition(context.Context, *GetBallPositionRequest) (*GetBallPositionReply, error)
 }
 
 func RegisterPongerServer(s *grpc.Server, srv PongerServer) {
@@ -164,6 +210,24 @@ func _Ponger_SetPlayerPosition_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Ponger_GetBallPosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBallPositionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PongerServer).GetBallPosition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pong.Ponger/GetBallPosition",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PongerServer).GetBallPosition(ctx, req.(*GetBallPositionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Ponger_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "pong.Ponger",
 	HandlerType: (*PongerServer)(nil),
@@ -171,6 +235,10 @@ var _Ponger_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetPlayerPosition",
 			Handler:    _Ponger_SetPlayerPosition_Handler,
+		},
+		{
+			MethodName: "GetBallPosition",
+			Handler:    _Ponger_GetBallPosition_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -180,18 +248,20 @@ var _Ponger_serviceDesc = grpc.ServiceDesc{
 func init() { proto.RegisterFile("pong.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 194 bytes of a gzipped FileDescriptorProto
+	// 236 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0xe2, 0x2a, 0xc8, 0xcf, 0x4b,
 	0xd7, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x01, 0xb1, 0x95, 0xdc, 0xb8, 0x24, 0x82, 0x53,
 	0x4b, 0x02, 0x72, 0x12, 0x2b, 0x53, 0x8b, 0x02, 0xf2, 0x8b, 0x33, 0x4b, 0x32, 0xf3, 0xf3, 0x82,
 	0x52, 0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x84, 0xf8, 0xb8, 0x98, 0x3c, 0x53, 0x24, 0x18, 0x15, 0x18,
 	0x35, 0x58, 0x83, 0x80, 0x2c, 0x21, 0x1e, 0x2e, 0xc6, 0x08, 0x09, 0x26, 0x30, 0x97, 0x31, 0x02,
 	0xc4, 0x8b, 0x94, 0x60, 0x86, 0xf0, 0x22, 0x95, 0x5c, 0xb8, 0xc4, 0xb0, 0x98, 0x53, 0x90, 0x53,
-	0x49, 0x8a, 0x29, 0x46, 0xb1, 0x5c, 0x6c, 0x01, 0x40, 0x57, 0xa5, 0x16, 0x09, 0x05, 0x73, 0x09,
-	0x62, 0x98, 0x27, 0x24, 0xa7, 0x07, 0x76, 0x3f, 0x2e, 0x07, 0x4b, 0xc9, 0xe0, 0x94, 0x07, 0x3a,
-	0x44, 0x89, 0xc1, 0xc9, 0x80, 0x4b, 0x3a, 0x33, 0x5f, 0x2f, 0xbd, 0xa8, 0x20, 0x59, 0x2f, 0xb5,
-	0x22, 0x31, 0xb7, 0x20, 0x27, 0xb5, 0x58, 0x2f, 0x23, 0x35, 0x27, 0x27, 0xbf, 0x3c, 0xbf, 0x28,
-	0x27, 0xc5, 0x89, 0xdf, 0x03, 0xc4, 0x0e, 0x07, 0xb1, 0x03, 0x40, 0x41, 0x14, 0xc0, 0x98, 0xc4,
-	0x06, 0x0e, 0x2b, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0x7f, 0xc5, 0xbe, 0xe3, 0x39, 0x01,
-	0x00, 0x00,
+	0x49, 0x92, 0x29, 0x12, 0x5c, 0x62, 0xee, 0xa9, 0x25, 0x4e, 0x89, 0x39, 0x39, 0x68, 0x6e, 0x51,
+	0x32, 0xe2, 0x12, 0xc1, 0x90, 0x01, 0x99, 0x8e, 0xc7, 0x34, 0xa3, 0x35, 0x8c, 0x5c, 0x6c, 0x01,
+	0x40, 0x4f, 0xa6, 0x16, 0x09, 0x05, 0x73, 0x09, 0x62, 0x38, 0x4f, 0x48, 0x4e, 0x0f, 0x1c, 0x1c,
+	0xb8, 0xfc, 0x2f, 0x25, 0x83, 0x53, 0x1e, 0x68, 0xb3, 0x12, 0x83, 0x90, 0x2f, 0x17, 0x3f, 0x9a,
+	0x9b, 0x84, 0xa0, 0x5a, 0xb0, 0x7b, 0x42, 0x4a, 0x0a, 0x87, 0x2c, 0xd8, 0x38, 0x27, 0x03, 0x2e,
+	0xe9, 0xcc, 0x7c, 0xbd, 0xf4, 0xa2, 0x82, 0x64, 0xbd, 0xd4, 0x8a, 0xc4, 0xdc, 0x82, 0x9c, 0xd4,
+	0x62, 0xbd, 0x8c, 0xd4, 0x9c, 0x9c, 0xfc, 0xf2, 0xfc, 0xa2, 0x9c, 0x14, 0x27, 0x7e, 0x0f, 0x10,
+	0x3b, 0x1c, 0xc4, 0x0e, 0x00, 0x45, 0x60, 0x00, 0x63, 0x12, 0x1b, 0x38, 0x26, 0x8d, 0x01, 0x01,
+	0x00, 0x00, 0xff, 0xff, 0xca, 0xb1, 0x8b, 0x56, 0xd7, 0x01, 0x00, 0x00,
 }

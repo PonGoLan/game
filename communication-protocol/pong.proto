@@ -6,10 +6,11 @@ option java_outer_classname = "HelloWorldProto";
 
 package pong;
 
-// The greeting service definition.
+// The Ponger service definition.
 service Ponger {
-  // Sends a greeting
+  // Sends a player position
   rpc SetPlayerPosition (SetPlayerPositionRequest) returns (SetPlayerPositionReply) {}
+  rpc GetBallPosition (GetBallPositionRequest) returns (GetBallPositionReply) {}
 }
 
 message SetPlayerPositionRequest {
@@ -17,10 +18,15 @@ message SetPlayerPositionRequest {
   int32 X = 2;
   int32 Y = 3;
 }
-
-// The response message containing the greetings
 message SetPlayerPositionReply {
   int32 Id = 1;
+  int32 X = 2;
+  int32 Y = 3;
+}
+
+
+message GetBallPositionRequest {}
+message GetBallPositionReply {
   int32 X = 2;
   int32 Y = 3;
 }
