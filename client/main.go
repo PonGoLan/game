@@ -1,43 +1,18 @@
 package main
 
 import (
-	"log"
 	"time"
 
-	"golang.org/x/net/context"
-
-	pb "github.com/PonGoLan/game/communication-protocol"
+	client "github.com/PonGoLan/game/client/network"
 	pong "github.com/PonGoLan/game/shared"
 
-	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/imdraw"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
-	"google.golang.org/grpc"
-)
-
-const (
-	address = "192.168.1.76:50051"
 )
 
 func run() {
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	defer conn.Close()
-	c := pb.NewPongerClient(conn)
-
-	ctx := context.Background()
-	// defer cancel()
-
-	cfg := pixelgl.WindowConfig{
-		Title:  "PonGoLan - Client",
-		Bounds: pixel.R(0, 0, 1024, 768),
-		VSync:  true,
-	}
-	win, err := pixelgl.NewWindow(cfg)
+	win, err := pixelgl.NewWindow(pong.GetConfig().WindoWConfig)
 	if err != nil {
 		panic(err)
 	}
@@ -47,29 +22,23 @@ func run() {
 	imd := imdraw.New(nil)
 
 	game := pong.NewGame()
-
 	board := pong.NewBoard()
-	player1 := pong.NewPlayer(1, board)
-	player2 := pong.NewPlayer(2, board)
-	game.Players[0] = player1
-	game.Players[1] = player2
+	game.Players[0] = pong.NewPlayer(0, board)
+	game.Players[1] = pong.NewPlayer(1, board)
 
 	ball := pong.NewBall(board)
 
 	aTick := time.Tick(time.Second / 128)
 
-	identificationResponse, err := c.IdentifyPlayer(ctx, &pb.IdentifyPlayerRequest{})
-	log.Printf("Player Number  : %d\n", identificationResponse.PlayerNumber)
-	log.Printf("Handshake used : %s\n", identificationResponse.Handshake)
-
-	player := game.Players[identificationResponse.PlayerNumber]
+	// [network] identify current client
+	playerNumber := client.Get().Identify()
+	player := game.Players[playerNumber]
 
 	for !win.Closed() {
 		pong.ApplyMatrixToWindow(win)
 
 		board.Draw(imd)
-		player1.Draw(imd)
-		player2.Draw(imd)
+		game.DrawPlayers(imd)
 		ball.Draw(imd)
 
 		win.Clear(colornames.Black)
@@ -88,39 +57,19 @@ func run() {
 			player.HandleWindowEvents(win)
 
 			// Update current player position
-			_, err := c.SetPlayerPosition(ctx, &pb.SetPlayerPositionRequest{
-				Handshake:    identificationResponse.Handshake,
-				PlayerNumber: identificationResponse.PlayerNumber,
-				X:            int32(player.X),
-				Y:            int32(player.Y),
-			})
-			if err != nil {
-				log.Printf("could not set pos: %v", err)
-			}
+			client.Get().SendPlayerPosition(player)
 
 			// Update ball position
-			r, err := c.GetBallPosition(ctx, &pb.GetBallPositionRequest{})
-			if err != nil {
-				log.Printf("could not get ball position: %v", err)
-			}
-			if r != nil {
-				ball.SetPosition(int(r.X), int(r.Y))
+			ballX, ballY, err := client.Get().GetBallPosition()
+			if err == nil {
+				ball.SetPosition(ballX, ballY)
 			}
 
 			// update opponent position
-			rOpp, err := c.GetOpponent(ctx, &pb.GetOpponentRequest{
-				PlayerNumber: identificationResponse.PlayerNumber,
-				Handshake:    identificationResponse.Handshake,
-			})
-			if err != nil {
-				log.Printf("could not get ball position: %v", err)
+			oppNumber, oppX, oppY, err := client.Get().GetOpponent(player)
+			if err == nil {
+				game.Players[oppNumber].SetPosition(oppX, oppY)
 			}
-			if rOpp != nil {
-				log.Printf("OPP [%d] (%d, %d)\n", rOpp.PlayerNumber, rOpp.X, rOpp.Y)
-				game.Players[rOpp.PlayerNumber].SetPosition(int(rOpp.X), int(rOpp.Y))
-			}
-
-			// player2.HandleWindowEvents(win)
 		default:
 		}
 	}
