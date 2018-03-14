@@ -62,6 +62,11 @@ func NewPlayer(playerNumber int, b *Board) *Player {
 	return player
 }
 
+func (p *Player) SetPosition(x, y int) {
+	p.X = x
+	p.Y = y
+}
+
 func (p *Player) Move(offsetX, offsetY int) {
 	newX := p.X + offsetX
 	newY := p.Y + offsetY

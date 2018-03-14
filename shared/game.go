@@ -11,6 +11,9 @@ import (
 
 type Game struct {
 	Score map[int]int
+
+	Players [2]*Player
+	Ball    *Ball
 }
 
 func NewGame() *Game {

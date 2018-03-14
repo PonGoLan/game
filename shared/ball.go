@@ -34,6 +34,14 @@ func (b *Ball) Draw(imd *imdraw.IMDraw) {
 	// imd.Line(2)
 }
 
+func (b *Ball) SetPosition(x, y int) {
+	b.X = x
+	b.Y = y
+}
+func (b *Ball) GetPosition() (int, int) {
+	return b.X, b.Y
+}
+
 func NewBall(b *Board) *Ball {
 	ball := new(Ball)
 
