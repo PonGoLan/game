@@ -51,10 +51,18 @@ func run() {
 	board := pong.NewBoard()
 	player1 := pong.NewPlayer(1, board)
 	player2 := pong.NewPlayer(2, board)
+	game.Players[0] = player1
+	game.Players[1] = player2
 
 	ball := pong.NewBall(board)
 
 	aTick := time.Tick(time.Second / 128)
+
+	identificationResponse, err := c.IdentifyPlayer(ctx, &pb.IdentifyPlayerRequest{})
+	log.Printf("Player Number  : %d\n", identificationResponse.PlayerNumber)
+	log.Printf("Handshake used : %s\n", identificationResponse.Handshake)
+
+	player := game.Players[identificationResponse.PlayerNumber]
 
 	for !win.Closed() {
 		pong.ApplyMatrixToWindow(win)
@@ -77,17 +85,20 @@ func run() {
 			// pong.BallPlayerCollision(ball, player1)
 			// pong.BallPlayerCollision(ball, player2)
 			// ball.Move(game)
-			player1.HandleWindowEvents(win)
+			player.HandleWindowEvents(win)
 
+			// Update current player position
 			_, err := c.SetPlayerPosition(ctx, &pb.SetPlayerPositionRequest{
-				Id: 1,
-				X:  int32(player1.X),
-				Y:  int32(player1.Y),
+				Handshake:    identificationResponse.Handshake,
+				PlayerNumber: identificationResponse.PlayerNumber,
+				X:            int32(player.X),
+				Y:            int32(player.Y),
 			})
 			if err != nil {
 				log.Printf("could not set pos: %v", err)
 			}
 
+			// Update ball position
 			r, err := c.GetBallPosition(ctx, &pb.GetBallPositionRequest{})
 			if err != nil {
 				log.Printf("could not get ball position: %v", err)
@@ -96,7 +107,7 @@ func run() {
 				ball.SetPosition(int(r.X), int(r.Y))
 			}
 
-			player2.HandleWindowEvents(win)
+			// player2.HandleWindowEvents(win)
 		default:
 		}
 	}
