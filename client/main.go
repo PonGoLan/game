@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	address = "localhost:50051"
+	address = "192.168.1.76:50051"
 )
 
 func run() {
@@ -105,6 +105,19 @@ func run() {
 			}
 			if r != nil {
 				ball.SetPosition(int(r.X), int(r.Y))
+			}
+
+			// update opponent position
+			rOpp, err := c.GetOpponent(ctx, &pb.GetOpponentRequest{
+				PlayerNumber: identificationResponse.PlayerNumber,
+				Handshake:    identificationResponse.Handshake,
+			})
+			if err != nil {
+				log.Printf("could not get ball position: %v", err)
+			}
+			if rOpp != nil {
+				log.Printf("OPP [%d] (%d, %d)\n", rOpp.PlayerNumber, rOpp.X, rOpp.Y)
+				game.Players[rOpp.PlayerNumber].SetPosition(int(rOpp.X), int(rOpp.Y))
 			}
 
 			// player2.HandleWindowEvents(win)
