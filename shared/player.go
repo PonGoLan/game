@@ -39,19 +39,18 @@ func NewPlayer(playerNumber int, b *Board) *Player {
 
 	player.Size = 20
 
+	player.ButtonUp = pixelgl.KeyW
+	player.ButtonDown = pixelgl.KeyS
+	player.ButtonLeft = pixelgl.KeyA
+	player.ButtonRight = pixelgl.KeyD
 	if playerNumber == 1 {
-		player.ButtonUp = pixelgl.KeyW
-		player.ButtonDown = pixelgl.KeyS
-		player.ButtonLeft = pixelgl.KeyA
-		player.ButtonRight = pixelgl.KeyD
-
 		player.X = 1
 		player.Y = 1
 	} else if playerNumber == 2 {
-		player.ButtonUp = pixelgl.KeyUp
-		player.ButtonDown = pixelgl.KeyDown
-		player.ButtonLeft = pixelgl.KeyLeft
-		player.ButtonRight = pixelgl.KeyRight
+		//player.ButtonUp = pixelgl.KeyUp
+		//player.ButtonDown = pixelgl.KeyDown
+		//player.ButtonLeft = pixelgl.KeyLeft
+		//player.ButtonRight = pixelgl.KeyRight
 
 		player.X = 150 - 1
 		player.Y = 100 - player.Size - 1
