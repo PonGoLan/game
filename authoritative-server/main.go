@@ -25,6 +25,7 @@ var (
 	game *pong.Game
 
 	playerHashcodes map[int]string
+	nextPlayer      int
 )
 
 type server struct{}
@@ -53,11 +54,28 @@ func (s *server) GetBallPosition(ctx context.Context, in *pb.GetBallPositionRequ
 }
 
 func (s *server) IdentifyPlayer(ctx context.Context, in *pb.IdentifyPlayerRequest) (*pb.IdentifyPlayerReply, error) {
-	playerHashcodes[1] = "lol"
+	nextPlayer++
+	playerHashcodes[nextPlayer] = "lol"
 
 	return &pb.IdentifyPlayerReply{
-		PlayerNumber: 1,
+		PlayerNumber: int32(nextPlayer) - 1,
 		Handshake:    "lol",
+	}, nil
+}
+
+func (s *server) GetOpponent(ctx context.Context, in *pb.GetOpponentRequest) (*pb.GetOpponentReply, error) {
+	var player *pong.Player
+
+	if in.PlayerNumber == 0 {
+		player = game.Players[1]
+	} else if in.PlayerNumber == 1 {
+		player = game.Players[0]
+	}
+
+	return &pb.GetOpponentReply{
+		PlayerNumber: int32(player.Number),
+		X:            int32(player.X),
+		Y:            int32(player.Y),
 	}, nil
 }
 
@@ -82,8 +100,8 @@ func run() {
 	imd := imdraw.New(nil)
 
 	board := pong.NewBoard()
-	player1 := pong.NewPlayer(1, board)
-	player2 := pong.NewPlayer(2, board)
+	player1 := pong.NewPlayer(0, board)
+	player2 := pong.NewPlayer(1, board)
 
 	game.Players[0] = player1
 	game.Players[1] = player2
