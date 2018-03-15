@@ -9,10 +9,7 @@ import (
 	pb "github.com/PonGoLan/game/communication-protocol"
 	pong "github.com/PonGoLan/game/shared"
 
-	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/imdraw"
 	"github.com/faiface/pixel/pixelgl"
-	"golang.org/x/image/colornames"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -27,6 +24,9 @@ var (
 
 	playerHashcodes map[int]string
 	nextPlayer      int
+
+	ticks  = 0
+	second = time.Tick(time.Second)
 )
 
 type server struct{}
@@ -35,7 +35,7 @@ func (s *server) SetPlayerPosition(ctx context.Context, in *pb.SetPlayerPosition
 	oldX, oldY := game.Players[in.PlayerNumber].GetPosition()
 
 	if oldX != int(in.X) || oldY != int(in.Y) {
-		log.Printf("MOVE [%d] to (%d, %d)\n", in.PlayerNumber, in.X, in.Y)
+		// log.Printf("MOVE [%d] to (%d, %d)\n", in.PlayerNumber, in.X, in.Y)
 		dx := math.Abs(float64(oldX - int(in.X)))
 		dy := math.Abs(float64(oldY - int(in.Y)))
 		if dx <= 1 && dy <= 1 {
@@ -99,19 +99,19 @@ func init() {
 }
 
 func run() {
-	cfg := pixelgl.WindowConfig{
-		Title:  "PonGoLAN - Server",
-		Bounds: pixel.R(0, 0, 1024, 768),
-		VSync:  true,
-	}
-	win, err := pixelgl.NewWindow(cfg)
-	if err != nil {
-		panic(err)
-	}
+	// cfg := pixelgl.WindowConfig{
+	// 	Title:  "PonGoLAN - Server",
+	// 	Bounds: pixel.R(0, 0, 1024, 768),
+	// 	VSync:  true,
+	// }
+	// win, err := pixelgl.NewWindow(cfg)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	win.Clear(colornames.Skyblue)
+	// win.Clear(colornames.Skyblue)
 
-	imd := imdraw.New(nil)
+	// imd := imdraw.New(nil)
 
 	board := pong.NewBoard()
 	player1 := pong.NewPlayer(0, board)
@@ -125,24 +125,28 @@ func run() {
 
 	aTick := time.Tick(time.Second / 128)
 
-	for !win.Closed() {
-		pong.ApplyMatrixToWindow(win)
+	for 1 == 1 {
+		// pong.ApplyMatrixToWindow(win)
 
-		board.Draw(imd)
-		player1.Draw(imd)
-		player2.Draw(imd)
-		ball.Draw(imd)
+		// board.Draw(imd)
+		// player1.Draw(imd)
+		// player2.Draw(imd)
+		// ball.Draw(imd)
 
-		win.Clear(colornames.Black)
-		imd.Draw(win)
+		// win.Clear(colornames.Black)
+		// imd.Draw(win)
 
-		game.DrawScore(win)
+		// game.DrawScore(win)
 
-		win.Update()
-		imd.Clear()
+		// win.Update()
+		// imd.Clear()
 
 		select {
+		case <-second:
+			log.Printf("[TICKS/s]: %d\n", ticks)
+			ticks = 0
 		case <-aTick:
+			ticks++
 			pong.BallPlayerCollision(ball, player1)
 			pong.BallPlayerCollision(ball, player2)
 			ball.Move(game)
