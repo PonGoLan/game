@@ -17,6 +17,14 @@ service Ponger {
 
   // Get Player number and the handshake which will be required in the other calls
   rpc IdentifyPlayer (IdentifyPlayerRequest) returns (IdentifyPlayerReply) {}
+
+  rpc GetScore(GetScoreRequest) returns (GetScoreReply){}
+}
+
+message GetScoreRequest{}
+message GetScoreReply {
+  int32 Score0 = 1;
+  int32 Score1 = 2;
 }
 
 message SetPlayerPositionRequest {
