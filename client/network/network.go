@@ -63,8 +63,8 @@ func (pc *PongClient) Identify() int32 {
 
 // SendPlayerPosition send the current position of the player passed
 // as parameter to the server
-func (pc *PongClient) SendPlayerPosition(player *pong.Player) {
-	_, err := pc.PongerService.SetPlayerPosition(pc.Context, &pb.SetPlayerPositionRequest{
+func (pc *PongClient) SendPlayerPosition(player *pong.Player) (int, int, error) {
+	reply, err := pc.PongerService.SetPlayerPosition(pc.Context, &pb.SetPlayerPositionRequest{
 		Handshake:    pc.handshake,
 		PlayerNumber: int32(player.Number),
 		X:            int32(player.X),
@@ -72,7 +72,9 @@ func (pc *PongClient) SendPlayerPosition(player *pong.Player) {
 	})
 	if err != nil {
 		log.Printf("[ERR] couldnt send position\n")
+		return 0, 0, err
 	}
+	return int(reply.X), int(reply.Y), nil
 }
 
 // GetBallPosition retrieve the ball position from the server
