@@ -101,3 +101,15 @@ func (pc *PongClient) GetOpponent(player *pong.Player) (int, int, int, error) {
 	}
 	return int(reply.PlayerNumber), int(reply.X), int(reply.Y), nil
 }
+
+func (pc *PongClient) GetScore(g *pong.Game) {
+	reply, err := pc.PongerService.GetScore(pc.Context, &pb.GetScoreRequest{})
+
+	if err != nil {
+		log.Printf("[ERR] couldnt get score\n")
+		return
+	}
+
+	g.Score[0] = int(reply.Score0)
+	g.Score[1] = int(reply.Score1)
+}
