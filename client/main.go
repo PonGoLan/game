@@ -58,6 +58,7 @@ func run() {
 		select {
 		case <-second:
 			win.SetTitle(pong.GetConfig().GetTitle(frames))
+			client.Get().GetScore(game)
 			frames = 0
 		case <-aTick:
 			// pong.BallPlayerCollision(ball, player1)
