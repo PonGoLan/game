@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math"
 	"net"
 	"time"
 
@@ -35,13 +36,19 @@ func (s *server) SetPlayerPosition(ctx context.Context, in *pb.SetPlayerPosition
 
 	if oldX != int(in.X) || oldY != int(in.Y) {
 		log.Printf("MOVE [%d] to (%d, %d)\n", in.PlayerNumber, in.X, in.Y)
+		dx := math.Abs(float64(oldX - int(in.X)))
+		dy := math.Abs(float64(oldY - int(in.Y)))
+		if dx <= 1 && dy <= 1 {
+			game.Players[in.PlayerNumber].SetPosition(int(in.X), int(in.Y))
+		}
 	}
-	game.Players[in.PlayerNumber].SetPosition(int(in.X), int(in.Y))
+
+	newX, newY := game.Players[in.PlayerNumber].GetPosition()
 
 	return &pb.SetPlayerPositionReply{
 		PlayerNumber: in.PlayerNumber,
-		X:            in.X,
-		Y:            in.Y,
+		X:            int32(newX),
+		Y:            int32(newY),
 	}, nil
 }
 func (s *server) GetBallPosition(ctx context.Context, in *pb.GetBallPositionRequest) (*pb.GetBallPositionReply, error) {
