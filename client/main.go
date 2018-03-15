@@ -11,6 +11,11 @@ import (
 	"golang.org/x/image/colornames"
 )
 
+var (
+	frames = 0
+	second = time.Tick(time.Second)
+)
+
 func run() {
 	win, err := pixelgl.NewWindow(pong.GetConfig().WindoWConfig)
 	if err != nil {
@@ -49,7 +54,11 @@ func run() {
 		win.Update()
 		imd.Clear()
 
+		frames++
 		select {
+		case <-second:
+			win.SetTitle(pong.GetConfig().GetTitle(frames))
+			frames = 0
 		case <-aTick:
 			// pong.BallPlayerCollision(ball, player1)
 			// pong.BallPlayerCollision(ball, player2)
