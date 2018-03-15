@@ -123,7 +123,7 @@ func run() {
 	ball := pong.NewBall(board)
 	game.Ball = ball
 
-	aTick := time.Tick(time.Second / 128)
+	aTick := time.Tick(time.Second / 64)
 
 	for 1 == 1 {
 		// pong.ApplyMatrixToWindow(win)
