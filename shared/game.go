@@ -40,7 +40,7 @@ func (g *Game) DrawScore(win *pixelgl.Window) {
 	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
 	txt := text.New(pixel.V(770, 940), basicAtlas)
 
-	fmt.Fprintf(txt, "%02d", g.Score[1])
+	fmt.Fprintf(txt, "%02d", g.Score[0])
 
 	txt.Draw(win, pixel.IM.Scaled(txt.Orig, 4))
 
@@ -48,7 +48,7 @@ func (g *Game) DrawScore(win *pixelgl.Window) {
 
 	txt = text.New(pixel.V(675, 940), basicAtlas)
 
-	fmt.Fprintf(txt, "%02d", g.Score[2])
+	fmt.Fprintf(txt, "%02d", g.Score[1])
 
 	txt.Draw(win, pixel.IM.Scaled(txt.Orig, 4))
 }

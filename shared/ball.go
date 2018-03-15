@@ -64,10 +64,10 @@ func (b *Ball) Move(game *Game) {
 	newY := b.Y + b.VectorY
 
 	if newX == 0 {
-		game.AddPoint(1)
+		game.AddPoint(0)
 	}
 	if newX == b.Board.SizeX {
-		game.AddPoint(2)
+		game.AddPoint(1)
 	}
 	if newX == 0 || newX == b.Board.SizeX {
 		b.VectorX *= -1
