@@ -57,7 +57,10 @@ func run() {
 			player.HandleWindowEvents(win)
 
 			// Update current player position
-			client.Get().SendPlayerPosition(player)
+			pX, pY, err := client.Get().SendPlayerPosition(player)
+			if err == nil {
+				player.SetPosition(pX, pY)
+			}
 
 			// Update ball position
 			ballX, ballY, err := client.Get().GetBallPosition()
