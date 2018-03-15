@@ -86,6 +86,13 @@ func (s *server) GetOpponent(ctx context.Context, in *pb.GetOpponentRequest) (*p
 	}, nil
 }
 
+func (s *server) GetScore(ctx context.Context, in *pb.GetScoreRequest) (*pb.GetScoreReply, error) {
+	return &pb.GetScoreReply{
+		Score0: int32(game.Score[0]),
+		Score1: int32(game.Score[1]),
+	}, nil
+}
+
 func init() {
 	game = pong.NewGame()
 	playerHashcodes = make(map[int]string)
