@@ -21,7 +21,9 @@ service Ponger {
   rpc GetScore(GetScoreRequest) returns (GetScoreReply){}
 }
 
-message GetScoreRequest{}
+message GetScoreRequest{
+  string Handshake = 1;
+}
 message GetScoreReply {
   int32 Score0 = 1;
   int32 Score1 = 2;
@@ -47,7 +49,9 @@ message GetBallPositionReply {
   int32 Y = 2;
 }
 
-message IdentifyPlayerRequest {}
+message IdentifyPlayerRequest {
+  string Room = 1;
+}
 message IdentifyPlayerReply {
   int32 PlayerNumber = 1;
   string Handshake = 2;
