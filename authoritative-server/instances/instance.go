@@ -1,7 +1,6 @@
 package instances
 
 import (
-	"log"
 	"time"
 
 	pong "github.com/PonGoLan/game/shared"
@@ -29,19 +28,30 @@ func (i *Instance) Run() {
 	player1 := i.game.Players[0]
 	player2 := i.game.Players[1]
 
+	ticks := 0
 	for 1 == 1 {
 		select {
 		case <-second:
-			log.Printf("[TICKS/s]: %d\n", i.ticks)
-			i.ticks = 0
+			i.ticks = int8(ticks)
+			ticks = 0
 		case <-aTick:
-			i.ticks++
+			ticks++
 			pong.BallPlayerCollision(ball, player1)
 			pong.BallPlayerCollision(ball, player2)
 			ball.Move(i.game)
 		default:
 		}
 	}
+}
+
+func (i *Instance) GetRoomName() string {
+	return "foo"
+}
+func (i *Instance) GetTicks() int8 {
+	return i.ticks
+}
+func (i *Instance) GetNumberOfPlayersConnected() int8 {
+	return i.numberOfPlayersConnected
 }
 
 func (i *Instance) AddPlayer() int8 {

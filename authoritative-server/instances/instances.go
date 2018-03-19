@@ -38,3 +38,18 @@ func GetInstanceWithHash(hash string) *Instance {
 func LinkHashToRoom(hash, roomName string) {
 	manager.playerHashToRoom[hash] = roomName
 }
+
+func Get() *InstancesManager {
+	return manager
+}
+
+func (im *InstancesManager) GetInstances() map[string]*Instance {
+	return im.games
+}
+func (im *InstancesManager) NumberOfInstances() int {
+	return len(im.games)
+}
+
+func (im *InstancesManager) NumberOfPlayers() int {
+	return len(im.playerHashToRoom)
+}
