@@ -6,6 +6,7 @@ import (
 	"time"
 
 	serverdisplay "github.com/PonGoLan/game/authoritative-server/display"
+	"github.com/PonGoLan/game/authoritative-server/instances"
 	pongserver "github.com/PonGoLan/game/authoritative-server/network"
 	pb "github.com/PonGoLan/game/communication-protocol"
 
@@ -32,12 +33,16 @@ func handleNetworkConnections() {
 	}
 }
 
-func display() {
+func serverHandling() {
 	t := time.Tick(time.Second / 2)
+	instancesManager := instances.Get()
+
 	for 42 == 42 {
 		select {
 		case <-t:
 			{
+				instancesManager.RemoveStoppedInstance()
+				// refresh the display
 				serverdisplay.Print()
 			}
 		default:
@@ -47,5 +52,5 @@ func display() {
 
 func main() {
 	go handleNetworkConnections()
-	display()
+	serverHandling()
 }

@@ -53,3 +53,11 @@ func (im *InstancesManager) NumberOfInstances() int {
 func (im *InstancesManager) NumberOfPlayers() int {
 	return len(im.playerHashToRoom)
 }
+
+func (im *InstancesManager) RemoveStoppedInstance() {
+	for room, instance := range im.games {
+		if instance.GetStatus() == Stopped {
+			delete(im.games, room)
+		}
+	}
+}

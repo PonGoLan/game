@@ -25,6 +25,8 @@ func init() {
 func (s *Server) SetPlayerPosition(ctx context.Context, in *pb.SetPlayerPositionRequest) (*pb.SetPlayerPositionReply, error) {
 	// fmt.Printf("(handshake) %s\n", in.Handshake)
 	instance := instances.GetInstanceWithHash(in.Handshake)
+	instance.KeepAlive()
+
 	game := instance.GetGame()
 
 	oldX, oldY := game.Players[in.PlayerNumber].GetPosition()
@@ -48,6 +50,8 @@ func (s *Server) SetPlayerPosition(ctx context.Context, in *pb.SetPlayerPosition
 }
 func (s *Server) GetBallPosition(ctx context.Context, in *pb.GetBallPositionRequest) (*pb.GetBallPositionReply, error) {
 	instance := instances.GetInstanceWithHash(in.Handshake)
+	instance.KeepAlive()
+
 	game := instance.GetGame()
 
 	x, y := game.Ball.GetPosition()
@@ -67,6 +71,7 @@ func (s *Server) IdentifyPlayer(ctx context.Context, in *pb.IdentifyPlayerReques
 		instance = instances.Create(in.Room)
 		instances.LinkHashToRoom(handshake, in.Room)
 	}
+	instance.KeepAlive()
 
 	playerNumber := instance.AddPlayer()
 	// playerHashcodes[playerNumber] = handshake
@@ -79,6 +84,8 @@ func (s *Server) IdentifyPlayer(ctx context.Context, in *pb.IdentifyPlayerReques
 
 func (s *Server) GetOpponent(ctx context.Context, in *pb.GetOpponentRequest) (*pb.GetOpponentReply, error) {
 	instance := instances.GetInstanceWithHash(in.Handshake)
+	instance.KeepAlive()
+
 	game := instance.GetGame()
 
 	var player *pong.Player
@@ -98,6 +105,8 @@ func (s *Server) GetOpponent(ctx context.Context, in *pb.GetOpponentRequest) (*p
 
 func (s *Server) GetScore(ctx context.Context, in *pb.GetScoreRequest) (*pb.GetScoreReply, error) {
 	instance := instances.GetInstanceWithHash(in.Handshake)
+	instance.KeepAlive()
+
 	game := instance.GetGame()
 
 	return &pb.GetScoreReply{
